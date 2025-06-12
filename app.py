@@ -1,48 +1,49 @@
 import streamlit as st
 import openai
+import time
 
-# Set OpenAI key from Streamlit secrets
+# Set OpenAI API key from secrets
 client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-# Page config
+# Set page config
 st.set_page_config(page_title="Roswell-POC", page_icon="📘")
 st.title("📘 Roswell-POC – Ordinance Chatbot")
 st.subheader("Ask about Roswell, GA Code of Ordinances")
 st.markdown("💼 *Powered by OpenAI + Alfentra*")
 
 # Sidebar branding
-st.sidebar.markdown("**AI-powered City Ordinance Assistant**")
-st.sidebar.markdown("*Built for demonstration purposes*")
+st.sidebar.markdown("## 🏛️ AI Ordinance Assistant")
+st.sidebar.markdown("Welcome to **Roswell-POC**, an AI-powered demo assistant trained on the Code of Ordinances for the City of Roswell, GA.")
+st.sidebar.markdown("*Built and branded by Alfentra for city use case demos.*")
 
-# Sample ordinance content from PDF
+# Sample ordinance document context
 document_context = """
-Chapter 8. Health and Public Safety – Roswell Ordinances
+City of Roswell, GA – Code of Ordinances (Sample Excerpt)
+
+Chapter 8: Health and Public Safety
 
 Animal Control:
 - No person shall own or harbor any animal which is a nuisance.
 - All dogs must be vaccinated and tagged.
-- Animal control officers may seize animals found violating these rules.
-- Violation of these laws may lead to fines up to $500.
+- Animal control officers may seize animals violating these rules.
+- Violations may result in fines up to $500.
 
 Emergency Services:
 - The Emergency Management Director coordinates disaster response.
-- Citizens must follow emergency directives from the city.
+- Residents must follow all emergency orders during declared emergencies.
+
+Noise Ordinance:
+- Excessive noise between 10 PM and 6 AM is prohibited in residential areas.
 """
 
-# Get user input
-question = st.text_input("Ask a question:")
+# Store last query time in session to avoid spamming
+if "last_query_time" not in st.session_state:
+    st.session_state.last_query_time = 0
 
-# If a question is asked
+# Input from user
+question = st.text_input("🔍 What do you want to know?", placeholder="e.g., What is the fine for dog violations?")
+
+# If question submitted
 if question:
-    with st.spinner("Thinking..."):
-        response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": f"You are a helpful assistant. Use only this context:\n\n{document_context}"},
-                {"role": "user", "content": question}
-            ],
-            temperature=0.4,
-            max_tokens=300
-        )
-        answer = response.choices[0].message.content
-        st.success(answer)
+    now = time.time()
+    wait_time = 15  # 15 seconds between queri_
