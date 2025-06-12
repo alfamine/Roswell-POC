@@ -9,12 +9,12 @@ client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 st.set_page_config(page_title="Roswell-POC", page_icon="📘")
 st.title("📘 Roswell-POC – Ordinance Chatbot")
 st.subheader("Ask about Roswell, GA Code of Ordinances")
-st.markdown("💼 *Powered by OpenAI + Alfentra*")
+st.markdown("💼 *Powered by OpenAI + InfoGlobalTech*")
 
 # Sidebar branding
 st.sidebar.markdown("## 🏛️ AI Ordinance Assistant")
 st.sidebar.markdown("Welcome to **Roswell-POC**, an AI-powered demo trained on the Code of Ordinances for the City of Roswell, GA.")
-st.sidebar.markdown("*Built and branded by Alfentra for municipal chatbot use cases.*")
+st.sidebar.markdown("*Built and branded by InfoGlobalTech for municipal chatbot use cases.*")
 
 # Sample ordinance content from PDF
 document_context = """
