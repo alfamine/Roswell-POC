@@ -40,13 +40,13 @@ Noise Ordinance:
 if "last_query_time" not in st.session_state:
     st.session_state.last_query_time = 0
 
-# User input box
+# User input
 question = st.text_input("🔍 What do you want to know?", placeholder="e.g., What is the fine for dog violations?")
 
-# Run on submit
+# Handle query
 if question:
     now = time.time()
-    wait_time = 15  # seconds between requests
+    wait_time = 15  # seconds
 
     if now - st.session_state.last_query_time < wait_time:
         st.warning("⏳ Please wait 15 seconds between questions to avoid hitting limits.")
@@ -54,23 +54,20 @@ if question:
         st.session_state.last_query_time = now
         with st.spinner("Thinking..."):
             try:
-                response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
-                    messages=[
-                        {"role": "system", "content": f"You are a helpful city ordinance assistant. Use this context only:\n\n{document_context}"},
-                        {"role": "user", "content": question}
-                    ],
+                # Using gpt-3.5-turbo-instruct instead of chat model
+                response = client.completions.create(
+                    model="gpt-3.5-turbo-instruct",
+                    prompt=f"You are a helpful assistant for Roswell city ordinances. Use the following context to answer:\n\n{document_context}\n\nUser question: {question}",
                     temperature=0.4,
                     max_tokens=300
                 )
 
-                # Safely extract response
-                answer = response.choices[0].message.content
-                if answer.strip():
+                answer = response.choices[0].text.strip()
+                if answer:
                     st.success(answer)
                 else:
-                    st.warning("⚠️ Received empty response. Try rephrasing your question.")
-                    st.text("🔎 Raw API response:")
+                    st.warning("⚠️ No answer generated. Try rephrasing.")
+                    st.text("Raw response:")
                     st.json(response.model_dump())
 
             except openai.RateLimitError:
@@ -79,5 +76,5 @@ if question:
                 st.error("❌ Invalid or expired API key.")
             except Exception as e:
                 st.error("⚠️ Unexpected error occurred.")
-                st.text("🔎 Raw API response (if any):")
+                st.text("🔎 Raw response (if any):")
                 st.json(response.model_dump())
