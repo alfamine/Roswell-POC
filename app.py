@@ -12,7 +12,7 @@ logo = Image.open("IGT Logo.png")
 st.image(logo, width=180)
 st.title("📘 Roswell-POC – Chatbot")
 st.subheader("Ask about Roswell, GA Code of Ordinances")
-st.markdown("💼 *Powered by OpenAI + InfoGlobalTech*")
+st.markdown("💼 *Powered by InfoGlobalTech*")
 
 # Sidebar branding
 st.sidebar.markdown("## 🏛️ AI Ordinance Assistant")
