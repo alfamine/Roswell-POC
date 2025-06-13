@@ -1,5 +1,6 @@
 import streamlit as st
 import openai
+from PIL import Image
 import time
 
 # Set OpenAI API key from secrets
@@ -7,7 +8,9 @@ client = openai.OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 # Page settings
 st.set_page_config(page_title="Roswell-POC", page_icon="📘")
-st.title("📘 Roswell-POC – Ordinance Chatbot")
+logo = Image.open("igtlogo.png")
+st.image(logo, width=180)
+st.title("📘 Roswell-POC – Chatbot")
 st.subheader("Ask about Roswell, GA Code of Ordinances")
 st.markdown("💼 *Powered by OpenAI + InfoGlobalTech*")
 
